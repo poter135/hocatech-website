@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hocatech · 霍卡工作室 — 軟體與應用開發</title>
+<meta name="description" content="霍卡工作室 Hocatech — 專注於行動應用、網站與 AI 整合開發,用程式碼打造有溫度的產品。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231C1C1E' stroke='%237C5CBF' stroke-width='3'/%3E%3Ctext x='32' y='44' font-family='Inter,sans-serif' font-size='34' font-weight='900' fill='%239D7FD6' text-anchor='middle' letter-spacing='-1'%3EH%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #1C1C1E;
+    --surface-2: #2C2C2E;
+    --accent: #7C5CBF;
+    --accent-light: #9D7FD6;
+    --accent-dark: #5E3FA3;
+    --text: #FFFFFF;
+    --text-muted: #8E8E93;
+    --text-label: #555;
+    --gradient: linear-gradient(135deg, #9D7FD6 0%, #7C5CBF 50%, #5E3FA3 100%);
+    --gradient-soft: linear-gradient(135deg, #9D7FD6 0%, #7C5CBF 100%);
+    --glow: 0 8px 32px rgba(124, 92, 191, 0.3);
+    --glow-sm: 0 4px 20px rgba(124, 92, 191, 0.25);
+    --radius-card: 20px;
+    --radius-btn: 14px;
+    --radius-chip: 999px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Noto Sans TC', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── Section label (Vwake signature) ── */
+  .section-label {
+    font-size: 12px;
+    color: var(--text-label);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 640px;
+    line-height: 1.7;
+  }
+
+  .divider {
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 12px auto;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 10, 10, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+
+  .nav-logo {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .nav-logo .accent {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: var(--radius-btn);
+    background: var(--gradient-soft);
+    color: var(--text);
+    box-shadow: var(--glow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(124, 92, 191, 0.4);
+  }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: calc(100vh - 68px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 32px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse at center, rgba(124, 92, 191, 0.18) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero > * { position: relative; z-index: 1; }
+
+  .hero-wordmark {
+    font-size: 96px;
+    font-weight: 900;
+    letter-spacing: -3px;
+    line-height: 0.95;
+    margin-bottom: 18px;
+  }
+
+  .hero-wordmark .accent {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle-zh {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-muted);
+    letter-spacing: 6px;
+    margin-bottom: 32px;
+  }
+
+  .hero-tagline {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+    max-width: 720px;
+    margin-bottom: 20px;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 560px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: var(--radius-btn);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--gradient-soft);
+    color: var(--text);
+    box-shadow: var(--glow-sm);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(124, 92, 191, 0.45);
+  }
+
+  .btn-ghost {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .btn-ghost:hover {
+    background: var(--surface-2);
+    border-color: rgba(124, 92, 191, 0.4);
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: var(--text-label);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 1;
+  }
+
+  .scroll-indicator::after {
+    content: '';
+    width: 1px;
+    height: 28px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  @media (max-width: 768px) {
+    .hero-wordmark { font-size: 64px; letter-spacing: -2px; }
+    .hero-tagline { font-size: 24px; }
+    .hero-subtitle-zh { font-size: 16px; letter-spacing: 4px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-wordmark { font-size: 48px; letter-spacing: -1.5px; }
+    .hero-tagline { font-size: 20px; }
+  }
+
+  /* ── SECTION wrapper ── */
+  .section {
+    padding: 120px 0;
+    position: relative;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .section-header .section-desc {
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .section { padding: 80px 0; }
+    .section-title { font-size: 32px; }
+  }
+
+  /* ── SERVICES ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 540px) {
+    .services-grid { grid-template-columns: 1fr; }
+  }
+
+  .service-card {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    padding: 32px 28px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(124, 92, 191, 0.35);
+    background: var(--surface-2);
+  }
+
+  .service-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-btn);
+    background: var(--gradient-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--glow-sm);
+    margin-bottom: 20px;
+  }
+
+  .service-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
+  .service-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+
+  .service-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 18px;
+  }
+
+  .service-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .service-points li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .service-points li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ── WORKS ── */
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .works-grid { grid-template-columns: 1fr; }
+  }
+
+  .work-card {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .work-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(124, 92, 191, 0.35);
+  }
+
+  .work-cover {
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .work-cover.vwake {
+    background: radial-gradient(circle at 30% 40%, rgba(124, 92, 191, 0.4), transparent 60%),
+                linear-gradient(135deg, #1C1C1E 0%, #0a0a0a 100%);
+  }
+
+  .work-cover.vocabudget {
+    background: radial-gradient(circle at 70% 55%, rgba(157, 127, 214, 0.35), transparent 60%),
+                linear-gradient(135deg, #1C1C1E 0%, #0a0a0a 100%);
+  }
+
+  .work-cover.vocaplan {
+    background: radial-gradient(circle at 50% 75%, rgba(94, 63, 163, 0.5), transparent 65%),
+                linear-gradient(135deg, #1C1C1E 0%, #0a0a0a 100%);
+  }
+
+  .work-cover-label {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .work-cover-label.placeholder {
+    color: var(--text-label);
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    font-weight: 700;
+    letter-spacing: 4px;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  .work-body {
+    padding: 24px 28px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .work-tag {
+    font-size: 11px;
+    color: var(--accent-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .work-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+
+  .work-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .work-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-light);
+  }
+
+  .work-link:hover { color: var(--text); }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  .about-text p {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.9;
+    margin-bottom: 16px;
+  }
+
+  .about-text p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .about-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .chip {
+    padding: 10px 18px;
+    background: var(--surface);
+    border: 1px solid rgba(124, 92, 191, 0.25);
+    border-radius: var(--radius-chip);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.2px;
+  }
+
+  .chip .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* ── CONTACT (Vwake banner-style) ── */
+  .contact {
+    padding: 100px 0 120px;
+  }
+
+  .contact-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border-radius: var(--radius-card);
+    padding: 64px 56px;
+    border: 1px solid rgba(124, 92, 191, 0.18);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-banner::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(124, 92, 191, 0.22), transparent 70%);
+    pointer-events: none;
+  }
+
+  .contact-banner-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .contact-left .section-label { color: var(--accent-light); }
+
+  .contact-title {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .contact-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+
+  .contact-cta {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 18px 28px;
+    border-radius: var(--radius-btn);
+    background: var(--gradient-soft);
+    color: var(--text);
+    box-shadow: var(--glow);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .contact-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(124, 92, 191, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    .contact-banner { padding: 40px 28px; }
+    .contact-banner-inner { flex-direction: column; align-items: flex-start; }
+    .contact-title { font-size: 28px; }
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 40px 0 60px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .footer-logo {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .footer-logo .accent {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .footer-right {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .footer-right a { color: var(--accent-light); }
+  .footer-right a:hover { color: var(--text); }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(124, 92, 191, 0.4), transparent);
+    margin: 0 auto;
+    max-width: 200px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="nav-logo"><span class="accent">Hoca</span><span>tech</span></a>
+    <nav class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#works">Works</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="mailto:contact@hocatech.com" class="nav-cta">開始合作</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="section-label">Creative Software Studio</div>
+  <h1 class="hero-wordmark"><span class="accent">Hoca</span><span>tech</span></h1>
+  <div class="divider"></div>
+  <div class="hero-subtitle-zh">霍卡工作室</div>
+  <div class="hero-tagline">用程式碼,打造有溫度的產品。</div>
+  <p class="hero-desc">
+    我們是一間專注於行動應用、網站與 AI 整合的工作室。<br>
+    相信好的軟體不只是功能堆疊,更是與使用者之間的情感連結。
+  </p>
+  <div class="hero-ctas">
+    <a href="mailto:contact@hocatech.com" class="btn btn-primary">
+      開始合作
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
+    <a href="#works" class="btn btn-ghost">查看作品</a>
+  </div>
+  <div class="scroll-indicator">Scroll</div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Services · 服務項目</div>
+      <h2 class="section-title">我們提供的能力</h2>
+      <p class="section-desc">從概念、原型、設計到上線,涵蓋完整產品開發流程。</p>
+    </div>
+
+    <div class="services-grid">
+      <!-- App 開發 -->
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 18h4"/></svg>
+        </div>
+        <h3 class="service-title">App 開發</h3>
+        <p class="service-desc">跨平台行動應用,一次開發、雙平台上架。</p>
+      </div>
+
+      <!-- 網站開發 -->
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg>
+        </div>
+        <h3 class="service-title">網站開發</h3>
+        <p class="service-desc">品牌官網、Web 應用、電商系統,效能與美感兼具。</p>
+      </div>
+
+      <!-- AI 整合 -->
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/></svg>
+        </div>
+        <h3 class="service-title">AI 整合</h3>
+        <p class="service-desc">把 LLM、語音、影像等 AI 能力導入既有產品。</p>
+      </div>
+
+      <!-- UI/UX 設計 -->
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+        </div>
+        <h3 class="service-title">UI/UX 設計</h3>
+        <p class="service-desc">從使用者旅程到完整視覺系統,交付可實作的設計。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============ WORKS ============ -->
+<section class="section" id="works">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Works · 代表作品</div>
+      <h2 class="section-title">我們打造過的產品</h2>
+      <p class="section-desc">每一個作品都是我們對使用者體驗與技術邊界的一次嘗試。</p>
+    </div>
+
+    <div class="works-grid">
+      <!-- Vwake -->
+      <a href="#" class="work-card">
+        <div class="work-cover vwake">
+          <div class="work-cover-label">Vwake</div>
+        </div>
+        <div class="work-body">
+          <div class="work-tag">Mobile App</div>
+          <h3 class="work-title">Vwake — VTuber 語音鬧鐘</h3>
+          <p class="work-desc">為 ACG / VTuber 粉絲打造的清晨陪伴儀式。</p>
+          <span class="work-link">了解更多 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+
+      <!-- VocaBudget -->
+      <a href="#" class="work-card">
+        <div class="work-cover vocabudget">
+          <div class="work-cover-label">VocaBudget</div>
+        </div>
+        <div class="work-body">
+          <div class="work-tag">Mobile App · Voice · Finance</div>
+          <h3 class="work-title">VocaBudget — 語音記帳 App</h3>
+          <p class="work-desc">用說的就能記帳,一句話把每筆花費溫柔地收進來,省下打字與分類的麻煩。</p>
+          <span class="work-link">了解更多 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+
+      <!-- VocaPlan -->
+      <a href="#" class="work-card">
+        <div class="work-cover vocaplan">
+          <div class="work-cover-label">VocaPlan</div>
+        </div>
+        <div class="work-body">
+          <div class="work-tag">Mobile App · Voice · Productivity</div>
+          <h3 class="work-title">VocaPlan — 語音行程管理</h3>
+          <p class="work-desc">用說的安排每一天,讓語音成為最直覺的計畫入口,專心生活而不是操作 App。</p>
+          <span class="work-link">了解更多 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label">About · 關於我們</div>
+        <h2 class="section-title">小而精的軟體工作室</h2>
+        <p>
+          <strong>霍卡工作室 (Hocatech)</strong> 相信好的產品是一連串細節的堆疊 —
+          從一行程式、一段動畫、一個小提示,都該有被照顧到的理由。
+        </p>
+        <p>
+          我們擅長在 <strong>跨平台行動開發</strong>、<strong>Python/LLM 後端</strong>、
+          以及<strong>極簡設計語言</strong>之間找到平衡,讓每個專案同時兼顧性能與情感溫度。
+        </p>
+      </div>
+      <div class="about-chips">
+        <span class="chip"><span class="dot"></span>Flutter 專精</span>
+        <span class="chip"><span class="dot"></span>Python &amp; LLM</span>
+        <span class="chip"><span class="dot"></span>極簡設計</span>
+        <span class="chip"><span class="dot"></span>AI 內容安全</span>
+        <span class="chip"><span class="dot"></span>快速 MVP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-banner">
+      <div class="contact-banner-inner">
+        <div class="contact-left">
+          <div class="section-label">Let's Build Together</div>
+          <h2 class="contact-title">讓我們聊聊<br>你的下一個產品。</h2>
+          <p class="contact-sub">一般專案,我們會在 72 小時內回覆。</p>
+        </div>
+        <a href="mailto:contact@hocatech.com" class="contact-cta">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+          contact@hocatech.com
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-left">
+      <span class="footer-logo"><span class="accent">Hoca</span>tech</span>
+      <span>© 2026 霍卡工作室. All rights reserved.</span>
+    </div>
+    <div class="footer-right">
+      <a href="mailto:contact@hocatech.com">contact@hocatech.com</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
