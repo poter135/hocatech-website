@@ -686,6 +686,38 @@
   .footer-right a { color: var(--accent-light); }
   .footer-right a:hover { color: var(--text); }
 
+  .footer-legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .footer-legal-app {
+    font-weight: 600;
+    color: var(--accent-light);
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+  }
+
+  .footer-legal a {
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+  }
+
+  .footer-legal a:hover { color: var(--text); }
+
+  .footer-sep {
+    color: var(--text-label);
+    opacity: 0.7;
+    user-select: none;
+  }
+
   .section-divider {
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(124, 92, 191, 0.4), transparent);
@@ -884,13 +916,23 @@
 
 <!-- ============ FOOTER ============ -->
 <footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-left">
-      <span class="footer-logo"><span class="accent">Hoca</span>tech</span>
-      <span>© 2026 霍卡工作室. All rights reserved.</span>
+  <div class="container">
+    <div class="footer-legal">
+      <span class="footer-legal-app">Vwake</span>
+      <a href="/vwake/privacy.html">隱私政策</a>
+      <span class="footer-sep">·</span>
+      <a href="/vwake/terms.html">服務條款</a>
+      <span class="footer-sep">·</span>
+      <a href="/vwake/eula.html">使用者授權合約</a>
     </div>
-    <div class="footer-right">
-      <a href="mailto:contact@hocatech.com">contact@hocatech.com</a>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span class="footer-logo"><span class="accent">Hoca</span>tech</span>
+        <span>© 2026 霍卡工作室. All rights reserved.</span>
+      </div>
+      <div class="footer-right">
+        <a href="mailto:contact@hocatech.com">contact@hocatech.com</a>
+      </div>
     </div>
   </div>
 </footer>
