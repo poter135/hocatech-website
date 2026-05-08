@@ -11,3 +11,10 @@ claude_changes.log
 # Cloudflare Pages 本地快取(若之後用 wrangler dev)
 .wrangler/
 node_modules/
+
+# 創作者原始素材 zip / 解壓 — 只 commit 用到的頭貼到 vwake/assets/creators/
+創作者提供資源/
+_creator_extract/
+
+# 預覽檔(本機草稿,不部署)
+vwake/_preview.html

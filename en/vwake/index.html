@@ -268,60 +268,63 @@
     color: var(--accent-light); font-weight: 700;
   }
 
-  /* ROSTER (case section) */
-  .roster-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+  /* ROSTER (marquee) */
+  .roster-marquee {
+    position: relative;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   }
-  @media (max-width: 1024px) { .roster-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 540px) { .roster-grid { grid-template-columns: 1fr; } }
+  .roster-track {
+    display: flex;
+    gap: 14px;
+    width: max-content;
+    animation: roster-scroll 60s linear infinite;
+  }
+  .roster-track:hover { animation-play-state: paused; }
+  @keyframes roster-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .roster-track { animation: none; }
+  }
 
   .roster-card {
+    flex: 0 0 auto;
+    width: 132px;
     background: var(--surface);
-    border-radius: var(--radius-card);
-    padding: 28px 24px;
+    border-radius: 16px;
+    padding: 16px 12px 14px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     text-align: center;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-  }
-  .roster-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(124, 92, 191, 0.4);
   }
   .roster-avatar {
-    width: 72px; height: 72px;
+    width: 56px; height: 56px;
     border-radius: 50%;
     background: var(--gradient-soft);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; font-weight: 800;
-    margin: 0 auto 14px;
+    margin: 0 auto 10px;
     border: 2px solid rgba(124, 92, 191, 0.3);
+    overflow: hidden;
+  }
+  .roster-avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .roster-name {
-    font-size: 16px; font-weight: 700; margin-bottom: 4px;
+    font-size: 13px; font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .roster-meta {
-    font-size: 12px; color: var(--text-muted);
-    letter-spacing: 1px;
+    font-size: 11px; color: var(--text-muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .roster-tag {
-    display: inline-block; margin-top: 10px;
-    font-size: 10px; letter-spacing: 1.5px;
-    padding: 4px 10px; border-radius: 999px;
-    background: rgba(124, 92, 191, 0.15);
-    color: var(--accent-light); font-weight: 700;
-  }
-  .roster-card.placeholder {
-    background: transparent;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
-  }
-  .roster-card.placeholder .roster-avatar {
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--text-label); font-size: 32px;
-    border-color: rgba(255, 255, 255, 0.08);
-  }
-  .roster-card.placeholder .roster-name { color: var(--text-muted); }
 
   /* HOW IT WORKS */
   .steps {
@@ -406,7 +409,6 @@
   @media (max-width: 768px) {
     .final-cta { padding: 56px 28px; }
     .final-cta-title { font-size: 28px; }
-    .roster-card { padding: 22px 18px; }
   }
 
   /* FOOTER */
@@ -582,30 +584,31 @@
       </p>
     </div>
 
-    <div class="roster-grid">
-      <!-- Confirmed: pyonchan -->
-      <div class="roster-card">
-        <div class="roster-avatar">P</div>
-        <div class="roster-name">ぴょんちゃん</div>
-        <div class="roster-meta">Pyonchan · Independent</div>
-        <div class="roster-tag">FIRST WAVE</div>
-      </div>
+    <div class="roster-marquee">
+      <div class="roster-track">
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/pyonchan.png" alt="Pyonchan"></div><div class="roster-name">ぴょんちゃん兔兔</div><div class="roster-meta">Pyonchan</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/fingla.png" alt="Fingla"></div><div class="roster-name">Fingla 芬格拉</div><div class="roster-meta">Fingla</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/afeng.png" alt="Maple"></div><div class="roster-name">阿楓轟炸</div><div class="roster-meta">Maple</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/ohara-shiori.png" alt="Ohara Shiori"></div><div class="roster-name">小原栞</div><div class="roster-meta">Ohara Shiori</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/skymeowu.png" alt="SkyMeowu"></div><div class="roster-name">仙喵 SkyMeowu</div><div class="roster-meta">SkyMeowu</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/chimera.png" alt="Chimera"></div><div class="roster-name">奇美拉圈圈</div><div class="roster-meta">Chimera</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/maruru.png" alt="Maruru"></div><div class="roster-name">瑪露露 Maruru</div><div class="roster-meta">Maruru</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/shirakuma-koiyuki.png" alt="Koiyuki"></div><div class="roster-name">白熊戀雪</div><div class="roster-meta">Koiyuki</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/ribi.png" alt="Ribi"></div><div class="roster-name">莉比 Ribi</div><div class="roster-meta">Ribi</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/yukime.jpg" alt="Yukime"></div><div class="roster-name">雪迎</div><div class="roster-meta">Yukime</div></div>
+        <div class="roster-card"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/aquarius.png" alt="Aquarius"></div><div class="roster-name">水瓶罐子</div><div class="roster-meta">Aquarius</div></div>
 
-      <!-- Placeholders for incoming VTubers -->
-      <div class="roster-card placeholder">
-        <div class="roster-avatar">+</div>
-        <div class="roster-name">Coming soon</div>
-        <div class="roster-meta">Joining soon</div>
-      </div>
-      <div class="roster-card placeholder">
-        <div class="roster-avatar">+</div>
-        <div class="roster-name">Coming soon</div>
-        <div class="roster-meta">Joining soon</div>
-      </div>
-      <div class="roster-card placeholder">
-        <div class="roster-avatar">+</div>
-        <div class="roster-name">Coming soon</div>
-        <div class="roster-meta">Joining soon</div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/pyonchan.png" alt=""></div><div class="roster-name">ぴょんちゃん兔兔</div><div class="roster-meta">Pyonchan</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/fingla.png" alt=""></div><div class="roster-name">Fingla 芬格拉</div><div class="roster-meta">Fingla</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/afeng.png" alt=""></div><div class="roster-name">阿楓轟炸</div><div class="roster-meta">Maple</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/ohara-shiori.png" alt=""></div><div class="roster-name">小原栞</div><div class="roster-meta">Ohara Shiori</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/skymeowu.png" alt=""></div><div class="roster-name">仙喵 SkyMeowu</div><div class="roster-meta">SkyMeowu</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/chimera.png" alt=""></div><div class="roster-name">奇美拉圈圈</div><div class="roster-meta">Chimera</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/maruru.png" alt=""></div><div class="roster-name">瑪露露 Maruru</div><div class="roster-meta">Maruru</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/shirakuma-koiyuki.png" alt=""></div><div class="roster-name">白熊戀雪</div><div class="roster-meta">Koiyuki</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/ribi.png" alt=""></div><div class="roster-name">莉比 Ribi</div><div class="roster-meta">Ribi</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/yukime.jpg" alt=""></div><div class="roster-name">雪迎</div><div class="roster-meta">Yukime</div></div>
+        <div class="roster-card" aria-hidden="true"><div class="roster-avatar"><img src="/vwake/assets/creators/avatars/aquarius.png" alt=""></div><div class="roster-name">水瓶罐子</div><div class="roster-meta">Aquarius</div></div>
       </div>
     </div>
 
