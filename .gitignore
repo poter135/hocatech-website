@@ -18,3 +18,8 @@ _creator_extract/
 
 # 預覽檔(本機草稿,不部署)
 vwake/_preview.html
+
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
