@@ -1,0 +1,5 @@
+# Vwake 已搬遷至獨立域名 vwake.app
+/vwake          https://vwake.app/            301
+/vwake/*        https://vwake.app/:splat      301
+/en/vwake       https://vwake.app/en/         301
+/en/vwake/*     https://vwake.app/en/:splat   301
