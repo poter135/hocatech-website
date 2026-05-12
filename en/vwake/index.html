@@ -326,6 +326,90 @@
     text-overflow: ellipsis;
   }
 
+  /* APP PREVIEW STRIP */
+  .preview-frame { position: relative; }
+  .preview-wrap {
+    position: relative;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .preview-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(28, 28, 30, 0.92);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  }
+  .preview-nav:hover:not(:disabled) {
+    background: var(--gradient-soft);
+    border-color: rgba(124, 92, 191, 0.5);
+  }
+  .preview-nav:active:not(:disabled) { transform: translateY(-50%) scale(0.94); }
+  .preview-nav:disabled {
+    opacity: 0;
+    cursor: default;
+    pointer-events: none;
+  }
+  .preview-nav-prev { left: 8px; }
+  .preview-nav-next { right: 8px; }
+  @media (max-width: 540px) {
+    .preview-nav { width: 40px; height: 40px; }
+    .preview-nav-prev { left: 4px; }
+    .preview-nav-next { right: 4px; }
+  }
+  .preview-strip {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 80px;
+    padding: 8px 80px 24px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(124, 92, 191, 0.5) transparent;
+  }
+  @media (max-width: 540px) {
+    .preview-strip {
+      padding: 8px 56px 24px;
+      scroll-padding-inline: 56px;
+    }
+  }
+  .preview-strip::-webkit-scrollbar { height: 8px; }
+  .preview-strip::-webkit-scrollbar-track { background: transparent; }
+  .preview-strip::-webkit-scrollbar-thumb {
+    background: rgba(124, 92, 191, 0.4);
+    border-radius: 999px;
+  }
+  .preview-strip::-webkit-scrollbar-thumb:hover { background: rgba(124, 92, 191, 0.7); }
+  .preview-tile {
+    flex: 0 0 clamp(260px, 32vw, 380px);
+    scroll-snap-align: start;
+    transition: transform 0.3s ease;
+    display: block;
+    margin: 0;
+  }
+  .preview-tile:hover { transform: translateY(-6px); }
+  .preview-tile img {
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+    display: block;
+    background: #0a0a0a;
+  }
+
   /* HOW IT WORKS */
   .steps {
     display: grid;
@@ -442,6 +526,7 @@
         <span class="accent">V</span>wake
       </a>
       <div class="nav-links">
+        <a href="#preview">App Preview</a>
         <a href="#why">Why Vwake</a>
         <a href="#roster">VTubers on Vwake</a>
         <a href="#how">How it works</a>
@@ -478,6 +563,39 @@
     <a href="#why" class="btn btn-ghost">
       See why Vwake first
     </a>
+  </div>
+</section>
+
+<!-- ============ APP PREVIEW ============ -->
+<section class="section" id="preview">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Inside the App</div>
+      <h2 class="section-title">Here's what your fans will see every morning.</h2>
+      <div class="divider"></div>
+      <p class="section-desc">
+        Vwake for iOS launches soon.<br>
+        Below is what fans see when they open the app, pick you, and wake up to your voice.
+      </p>
+    </div>
+
+    <div class="preview-frame">
+      <button class="preview-nav preview-nav-prev" type="button" aria-label="Previous" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="preview-wrap">
+        <div class="preview-strip">
+          <figure class="preview-tile"><img src="/vwake/store_preview/storepreview1.png" alt="Vwake alarm list" loading="lazy"></figure>
+          <figure class="preview-tile"><img src="/vwake/store_preview/storepreview2.png" alt="Vwake VTuber store" loading="lazy"></figure>
+          <figure class="preview-tile"><img src="/vwake/store_preview/storepreview3.png" alt="Vwake full-screen alarm ringing" loading="lazy"></figure>
+          <figure class="preview-tile"><img src="/vwake/store_preview/storepreview4.png" alt="Vwake VTuber profile page" loading="lazy"></figure>
+          <figure class="preview-tile"><img src="/vwake/store_preview/storepreview5.png" alt="Vwake app launch screen" loading="lazy"></figure>
+        </div>
+      </div>
+      <button class="preview-nav preview-nav-next" type="button" aria-label="Next">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
   </div>
 </section>
 
@@ -740,5 +858,37 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  var strip = document.querySelector('.preview-strip');
+  var prev = document.querySelector('.preview-nav-prev');
+  var next = document.querySelector('.preview-nav-next');
+  if (!strip || !prev || !next) return;
+
+  function stepSize() {
+    var tile = strip.querySelector('.preview-tile');
+    if (!tile) return strip.clientWidth * 0.8;
+    var gapStr = getComputedStyle(strip).columnGap || getComputedStyle(strip).gap || '0';
+    var gap = parseFloat(gapStr) || 0;
+    return tile.getBoundingClientRect().width + gap;
+  }
+
+  function scrollByStep(dir) {
+    strip.scrollBy({ left: dir * stepSize(), behavior: 'smooth' });
+  }
+
+  prev.addEventListener('click', function () { scrollByStep(-1); });
+  next.addEventListener('click', function () { scrollByStep(1); });
+
+  function update() {
+    var maxScroll = strip.scrollWidth - strip.clientWidth;
+    prev.disabled = strip.scrollLeft <= 2;
+    next.disabled = strip.scrollLeft >= maxScroll - 2;
+  }
+  strip.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
 </body>
 </html>
